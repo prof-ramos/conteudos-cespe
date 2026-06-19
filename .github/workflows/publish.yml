@@ -1,11 +1,7 @@
 on:
+  workflow_dispatch:
   push:
     branches: [main]
-  workflow_dispatch:
-    inputs:
-      reason:
-        description: Reason
-        default: manual
 
 jobs:
   deploy:
