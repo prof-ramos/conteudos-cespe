@@ -1,0 +1,35 @@
+# Python
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# OMC workspace
+.omc/
+.agents/
+skills-lock.json
+
+# Scripts auxiliares (não essenciais para o pipeline)
+inspect_excel.py
+upload_to_hub.py
+
+# Dataset (regenerado pelo pipeline)
+!conteudo_dataset.csv
+!conteudo_dataset.json
+!conteudo_dataset.parquet
+!conteudo_dataset.xlsx
+
+# Relatórios gerados (regeneráveis)
+compare_report.md
