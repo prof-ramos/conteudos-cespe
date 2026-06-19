@@ -1,0 +1,32 @@
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          pip install pandas openpyxl pyarrow "huggingface-hub>=0.27"
+      - name: Generate dataset
+        run: python generate_dataset.py || echo "Source files may not be available in CI"
+      - name: Upload to HF Hub
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          [ -z "$HF_TOKEN" ] && echo "SKIP: no token" && exit 0
+          python -c "
+import os
+from huggingface_hub import HfApi
+api = HfApi()
+for f in ['conteudo_dataset.csv', 'conteudo_dataset.json', 'conteudo_dataset.parquet', 'conteudo_dataset.xlsx', 'README.md']:
+    if os.path.exists(f):
+        api.upload_file(path_or_fileobj=f, path_in_repo=f, repo_id='profgabrielramos/conteudos-cespe', repo_type='dataset')
+        print(f'Uploaded: {f}')
+"
